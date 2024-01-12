@@ -13,6 +13,7 @@ void setup() {
    Serial.begin(9600);
   threshold = setThreshold();
   Serial.println("Threshold Set Successfully.");
+  Serial.println("Fire shutter to calculate speed.");
 }
 
 void loop() {
@@ -35,24 +36,17 @@ void loop() {
 
 }
 
+
 int setThreshold() {
-  
-  int sensorValue1 = 0;
-  int sensorValue2 = 0;
-  int sensorValue3 = 0;
-  Serial.println("Calculating Ambient Light. Do not open shutter");
-  delay(500);
-  sensorValue1 = analogRead(pin);
-  Serial.println(sensorValue1);
-  delay(500);
-  sensorValue2 = analogRead(pin);
-  Serial.println(sensorValue1);
-  delay(500);
-  sensorValue3 = analogRead(pin);
-  Serial.println(sensorValue1);
-  delay(500);
-  Serial.println("If values are significantly different, reset and try again.");
-  delay(500);
-  return((sensorValue1+sensorValue2+sensorValue3)/3);
-  
+   Serial.println("Calculating Ambient Light. Do not open shutter for 10 seconds.");
+   int minValue = 0;
+   int i = 0;
+   while (i < 20) {
+      if (analogRead(pin) < minValue) {
+         minValue = analogRead(pin);
+         i+= 1;
+         delay(500);
+      }
+   return(minValue);
+   }
 }
